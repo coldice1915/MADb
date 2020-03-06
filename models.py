@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, create_engine
+from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 
@@ -31,7 +31,8 @@ def db_drop_and_create_all():
 db_test_data()
     sample data for testing
 '''
-# def db_test_data():
+#def db_test_data():
+#    JohnSmith = (Actor)
     
 '''
 Actor
@@ -42,14 +43,60 @@ class Actor(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     gender = Column(String)
-    age
+    age = Column(Integer)
 
-    def __init__(self, name, catchphrase=""):
+    def __init__(self, name, gender, age):
         self.name = name
-        self.catchphrase = catchphrase
+        self.gender = gender
+        self.age = age
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+  
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
     def format(self):
         return {
             'id': self.id,
             'name': self.name,
-            'catchphrase': self.catchphrase}
+            'gender': self.gender,
+            'age': self.age
+        }
+
+'''
+Movie
+'''
+class Movie(db.Model):
+    __tablename__ = 'movies'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    year = Column(Integer)
+
+    def __init__(self, title, year):
+        self.title = title
+        self.year = year
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+  
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'year': self.year
+        }
