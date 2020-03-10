@@ -9,7 +9,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
-    db_drop_and_create_all()
+    #db_drop_and_create_all()
 
     '''
     Routes
@@ -100,7 +100,7 @@ def create_app(test_config=None):
             
             return jsonify({
                 'success': True,
-                'delete': actor_id
+                'actor': actor_id
             }), 200
         except:
             abort(422)
@@ -184,7 +184,7 @@ def create_app(test_config=None):
 
             return jsonify({
                 'success': True,
-                'delete': movie_id
+                'movie': movie_id
             })
         
         except:

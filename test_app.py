@@ -17,10 +17,10 @@ class CastingAgencyTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "casting-agency"
-        self.database_path = "postgres://{}/{}".format(
-                             'localhost:5432', self.database_name
-                             )
+        self.database_filename = "database.db"
+        self.project_dir = os.path.dirname(os.path.abspath(__file__))
+        self.database_path = "sqlite:///{}".format(
+            os.path.join(self.project_dir, self.database_filename))
         setup_db(self.app, self.database_path)
         
         db_drop_and_create_all()
@@ -44,7 +44,7 @@ class CastingAgencyTestCase(unittest.TestCase):
             self.db.create_all()
 
     def tearDown(self):
-        """Executed after reach test"""
+        """Executed after each test"""
         pass
 
     """
@@ -188,7 +188,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['delete'], actor_id)
+        self.assertEqual(data['actor'], actor_id)
 
     def test_404_delete_actor_not_found(self):
         res = self.client().delete('/actors/999999', headers=token_cd)
@@ -213,7 +213,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['delete'], movie_id)
+        self.assertEqual(data['movie'], movie_id)
 
     def test_404_delete_movie_not_found(self):
         res = self.client().delete('/movies/999999', headers=token_ep)
