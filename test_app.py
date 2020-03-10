@@ -6,7 +6,6 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import db, setup_db, db_drop_and_create_all, Actor, Movie
 
-
 token_ep = {'Authorization': 'Bearer {}'.format(os.getenv('EXECUTIVE_PRODUCER'))}
 token_cd = {'Authorization': 'Bearer {}'.format(os.getenv('CASTING_DIRECTOR'))}
 token_ca = {'Authorization': 'Bearer {}'.format(os.getenv('CASTING_ASSISTANT'))}
