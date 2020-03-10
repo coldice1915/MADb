@@ -6,9 +6,14 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import db, setup_db, db_drop_and_create_all, Actor, Movie
 
-token_ep = {'Authorization': 'Bearer {}'.format(os.getenv('EXECUTIVE_PRODUCER'))}
-token_cd = {'Authorization': 'Bearer {}'.format(os.getenv('CASTING_DIRECTOR'))}
-token_ca = {'Authorization': 'Bearer {}'.format(os.getenv('CASTING_ASSISTANT'))}
+token_ep = {'Authorization': 'Bearer {}'.format(os.getenv(
+    'EXECUTIVE_PRODUCER'))}
+
+token_cd = {'Authorization': 'Bearer {}'.format(os.getenv(
+    'CASTING_DIRECTOR'))}
+
+token_ca = {'Authorization': 'Bearer {}'.format(os.getenv(
+    'CASTING_ASSISTANT'))}
 
 
 class CastingAgencyTestCase(unittest.TestCase):
@@ -22,9 +27,9 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.database_path = "sqlite:///{}".format(
             os.path.join(self.project_dir, self.database_filename))
         setup_db(self.app, self.database_path)
-        
+
         db_drop_and_create_all()
-        
+
         # test data
         self.new_actor = {
             'name': 'Obi Won Konobe',
@@ -100,7 +105,8 @@ class CastingAgencyTestCase(unittest.TestCase):
     Test endpoints POST:
     """
     def test_add_actor(self):
-        res = self.client().post('/actors', json=self.new_actor, headers=token_cd)
+        res = self.client().post(
+            '/actors', json=self.new_actor, headers=token_cd)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -122,7 +128,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_add_movie(self):
-        res = self.client().post('/movies', json=self.new_movie, headers=token_ep)
+        res = self.client().post(
+            '/movies', json=self.new_movie, headers=token_ep)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -137,7 +144,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_401_add_movie_unauthorized(self):
-        res = self.client().get('/movies', json=self.new_movie, headers='')    
+        res = self.client().get('/movies', json=self.new_movie, headers='')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -147,7 +154,8 @@ class CastingAgencyTestCase(unittest.TestCase):
     Test endpoints PATCH:
     """
     def test_update_actor(self):
-        res = self.client().patch('/actors/1', json=self.new_actor, headers=token_cd)
+        res = self.client().patch(
+            '/actors/1', json=self.new_actor, headers=token_cd)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -156,14 +164,16 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['actor']['age'], 100)
 
     def test_401_update_actor_unauthorized(self):
-        res = self.client().patch('/actors/1', json=self.new_actor, headers=token_ca)
+        res = self.client().patch(
+            '/actors/1', json=self.new_actor, headers=token_ca)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
 
     def test_update_movie(self):
-        res = self.client().patch('/movies/1', json=self.new_movie, headers=token_cd)
+        res = self.client().patch(
+            '/movies/1', json=self.new_movie, headers=token_cd)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -172,7 +182,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['movie']['year'], 1920)
 
     def test_401_update_movie_unauthorized(self):
-        res = self.client().patch('/movies/1', json=self.new_movie, headers=token_ca)
+        res = self.client().patch(
+            '/movies/1', json=self.new_movie, headers=token_ca)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -205,7 +216,6 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
 
-
     def test_delete_movie(self):
         movie_id = Movie.query.first().id
         res = self.client().delete(f'/movies/{movie_id}', headers=token_ep)
@@ -229,7 +239,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
-    
+
     # def test_delete_question(self):
     #     res = self.client().post('/questions', json=self.new_question)
     #     data = json.loads(res.data)
@@ -248,11 +258,8 @@ class CastingAgencyTestCase(unittest.TestCase):
     #     self.assertTrue(len(data['questions']))
     #     self.assertEqual(question, None)
 
-
-
-
-
 # Make the tests conveniently executable
+
+
 if __name__ == "__main__":
     unittest.main()
-
