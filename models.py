@@ -25,14 +25,39 @@ db_drop_and_create_all()
 def db_drop_and_create_all():
     db.drop_all()
     db.create_all()
-#   db_test_data()
+    db_test_data()
 
-'''
-db_test_data()
-    sample data for testing
-'''
-#def db_test_data():
-#    JohnSmith = (Actor)
+# '''
+# db_test_data()
+#     sample data for testing
+# '''
+def db_test_data():
+    actor1 = (Actor(
+        name='Will Smith',
+        gender='Male',
+        age=51
+        ))
+    actor1.insert()
+
+    actor2 = (Actor(
+        name='Margot Robbie',
+        gender='Female',
+        age=29
+        ))
+    actor2.insert()
+
+    movie1 = (Movie(
+        title='The Pursuit of Happiness',
+        year=2006,
+        ))
+    movie1.insert()
+
+    movie2 = (Movie(
+        title='Suicide Squad',
+        year=2016,
+        ))
+    movie2.insert()
+
     
 '''
 Actor
