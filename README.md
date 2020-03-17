@@ -196,30 +196,7 @@ Come see all our actors and movies
 }
 ```
 
-#### DELETE '/actors/<int:actor_id>'
-
-- General
-    - Deletes an actor
-- Sample: `curl -X DELETE http://0.0.0.0:8080/actors/3`
-```
-{
-  "id": 3,
-  "success": true
-}
-```
-
-#### DELETE '/movies/<int:movie_id>'
-
-- General
-    - Deletes a movie
-- Sample: `curl -X DELETE http://0.0.0.0:8080/movies/3`
-```
-{
-  "id": 3,
-  "success": true
-}
-```
-
+#### DELETE '/
 
 ### Testing
 Export the setup:
@@ -233,4 +210,4 @@ python test_app.py
 
 
 ##### Sources
-Udacity
+Udacitys
