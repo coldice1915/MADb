@@ -1,16 +1,15 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import db, db_drop_and_create_all, setup_db, Actor, Movie
 from auth import AuthError, requires_auth
 
-
 def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
-    # db_drop_and_create_all()
+    #db_drop_and_create_all()
 
     '''
     Routes
@@ -18,7 +17,7 @@ def create_app(test_config=None):
     # homepage
     @app.route('/')
     def homepage():
-        return 'Come see all our actors and movies'
+        return render_template('index.html')
 
     '''
     Actor routes
@@ -57,7 +56,7 @@ def create_app(test_config=None):
                 'actor': name
             }), 200
 
-        except Exception:
+        except:
             abort(422)
 
     # update actor
@@ -67,7 +66,7 @@ def create_app(test_config=None):
         name = request.get_json().get('name')
         gender = request.get_json().get('gender')
         age = request.get_json().get('age')
-
+        
         actor = Actor.query.filter_by(id=actor_id).one_or_none()
 
         if actor is None:
@@ -84,7 +83,7 @@ def create_app(test_config=None):
                 'actor': actor.format()
             }), 200
 
-        except Exception:
+        except:
             abort(422)
 
     # delete actor
@@ -98,12 +97,12 @@ def create_app(test_config=None):
 
         try:
             actor.delete()
-
+            
             return jsonify({
                 'success': True,
                 'actor': actor_id
             }), 200
-        except Exception:
+        except:
             abort(422)
 
     '''
@@ -117,7 +116,7 @@ def create_app(test_config=None):
 
         if len(movies) == 0:
             abort(404)
-
+        
         movies = [movie.format() for movie in movies]
 
         return jsonify({
@@ -134,7 +133,7 @@ def create_app(test_config=None):
 
         if (title or year) is None:
             abort(400)
-
+        
         try:
             movie = Movie(title=title, year=year).insert()
 
@@ -143,7 +142,7 @@ def create_app(test_config=None):
                 'movie': title
             }), 200
 
-        except Exception:
+        except:
             abort(422)
 
     # update movie
@@ -152,7 +151,7 @@ def create_app(test_config=None):
     def update_movie(payload, movie_id):
         title = request.get_json().get('title')
         year = request.get_json().get('year')
-
+        
         movie = Movie.query.filter_by(id=movie_id).one_or_none()
 
         if movie is None:
@@ -168,7 +167,7 @@ def create_app(test_config=None):
                 'movie': movie.format()
             }), 200
 
-        except Exception:
+        except:
             abort(422)
 
     # delete movie
@@ -179,7 +178,7 @@ def create_app(test_config=None):
 
         if movie is None:
             abort(404)
-
+        
         try:
             movie.delete()
 
@@ -187,8 +186,8 @@ def create_app(test_config=None):
                 'success': True,
                 'movie': movie_id
             })
-
-        except Exception:
+        
+        except:
             abort(422)
 
     '''
@@ -235,7 +234,6 @@ def create_app(test_config=None):
         }), error.status_code
 
     return app
-
 
 app = create_app()
 
