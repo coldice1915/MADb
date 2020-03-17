@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block actors %}
+	
+	{# edit actor modal #}
+	<div class="modal" id="editActorModal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+			<form class="box" onsubmit="event.preventDefault(); editActor()" id="editActorForm">
+				<input type="hidden" name="id">
+				<div class="field">
+					<label class="label">Name</label>
+					<div class="control">
+						<input class="input" type="text" placeholder="Actor's name" name="name">
+					</div>
+				</div>
+				<div class="field">
+					<div class="control">
+						<label class="radio">
+							<input type="radio" name="gender" value="M">
+							Male
+						</label>
+						<label class="radio">
+							<input type="radio" name="gender" value="F">
+							Female
+						</label>
+					</div>
+					<br>
+					<div class="field is-grouped">
+						<div class="control">
+							<button class="button is-primary">
+								<strong>Submit</strong>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<button class="modal-close is-large" aria-label="close"></button>
+	</div>
+	
+	<div class="columns is-multiline">
+		{% for actor in actors %}
+			<div class="column is-one-quarter">
+				<div class="card">
+					<div class="card-content">
+						<div class="media">
+				      <div class="media-left">
+				        <figure class="image is-48x48">
+				          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+				        </figure>
+				      </div>
+				      <div class="media-content">
+				        <p class="title is-4">{{ actor.name }}</p>
+				        <p class="subtitle is-6"><small>Gender: {{ actor.gender }}</small></p>
+				      </div>
+						</div>
+					</div>
+					<footer class="card-footer">
+				    <a class="editActorButton card-footer-item modal-button" data-target="#editActorModal"
+						   aria-haspopup="true" onclick="setFormValues('editActorForm', {{actor}})">Edit</a>
+				    <a class="deleteActorButton card-footer-item" onclick="deleteActor({{ actor.id }})">Delete</a>
+				  </footer>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
