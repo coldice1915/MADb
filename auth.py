@@ -21,45 +21,38 @@ class AuthError(Exception):
 Get Access Token from Authorization Header
 '''
 def get_token_auth_header():
-    auth_header = request.headers.get('Authorization', None)
+    """
+    Obtains the access token from the authorization header
+    :return: token
+    """
+    token = request.headers.get('Authorization')
 
-    if not auth_header:
-        raise AuthError({
-            'code': 'authorization_header_missing',
-            'description': 'Authorization header is expected.'
-        }, 401)
+    if not token:
+        raise AuthError('no authorization header', 401)
 
-    header_parts = auth_header.split()
+    # analyse token parts
+    token_parts = token.split()
 
-    if len(header_parts) != 2:
-        raise AuthError({
-            'code': 'invalid_header',
-            'description': 'Authorization header must be bearer token.'
-        }, 401)
-    elif header_parts[0].lower() != 'bearer':
-        raise AuthError({
-            'code': 'invalid_header',
-            'description': 'Authorization header must start with "Bearer".'
-        }, 401)
+    # should have 2 parts
+    if len(token_parts) != 2:
+        raise AuthError('authorization token should contain two parts', 401)
 
-    return header_parts[1]
+    bearer = token_parts[0]
+    token = token_parts[1]
+
+    # first part should be 'Bearer'
+    if bearer.capitalize() != 'Bearer':
+        raise AuthError('first part of the token should be Bearer', 401)
+
+    return token
 
 '''
 Check Permissions
 '''
 def check_permissions(permission, payload):
-    if 'permissions' not in payload:
-        raise AuthError({
-            'code': 'invalid_claims',
-            'description': 'Permissions not included in JWT.'
-        }, 400)
-
-    if permission not in payload['permissions']:
-        raise AuthError({
-            'code': 'unauthorized',
-            'description': 'Permissions not given.'
-        }, 401)
-
+    permissions = payload.get('permissions')
+    if not permissions or permission not in permissions:
+        raise AuthError('unauthorized', 403)
     return True
 
 '''
@@ -122,13 +115,25 @@ def verify_decode_jwt(token):
 auth decorator
 '''
 def requires_auth(permission=''):
+    """
+    ensures user is authenticated and authorized to access the endpoint
+    :param permission: the permissions required to access the endpoint
+    """
     def requires_auth_decorator(f):
+        """
+        auth decorator to reuse in protecting endpoints
+        :param f: endpoint that we'll be protecting
+        """
         @wraps(f)
         def wrapper(*args, **kwargs):
+            """
+            ensures request has Authorization header with bearer token
+            verifies the given token and checks the permissions embedded within it
+            appropriate exceptions are raised if any step fails, else, access is granted
+            """
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
-
         return wrapper
     return requires_auth_decorator

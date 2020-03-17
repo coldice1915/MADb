@@ -10,7 +10,7 @@ if (tokenUrl) {
     permissions = JSON.parse(atob(token.split('.')[1])).permissions;
     localStorage.setItem('permissions', permissions);
     if (!localStorage.getItem('permissions')) {
-      permissions = ['read:movies', 'read:actors']; // default permissions
+      permissions = ['get:movies', 'get:actors']; // default permissions
       localStorage.setItem('permissions', permissions);
     }
   } catch (e) {
@@ -30,22 +30,22 @@ if (localStorage.getItem('token') && localStorage.getItem('permissions')) {
   document.getElementById('loginButton').remove();
 
   // hide add actor button if no permissions
-  if (!localStorage.getItem('permissions').includes('write:actors')) {
+  if (!localStorage.getItem('permissions').includes('post:actors')) {
     document.getElementById('addActorButton').remove();
   }
 
   // hide add movie button if no permissions
-  if (!localStorage.getItem('permissions').includes('write:movies')) {
+  if (!localStorage.getItem('permissions').includes('post:movies')) {
     document.getElementById('addMovieButton').remove();
   }
 
   // hide edit actor button if no permissions
-  if (!localStorage.getItem('permissions').includes('update:actors')) {
+  if (!localStorage.getItem('permissions').includes('patch:actors')) {
     document.querySelectorAll('.editActorButton').forEach(e => e.remove());
   }
 
   // hide edit movie button if no permissions
-  if (!localStorage.getItem('permissions').includes('update:movies')) {
+  if (!localStorage.getItem('permissions').includes('patch:movies')) {
     document.querySelectorAll('.editMovieButton').forEach(e => e.remove());
   }
 
