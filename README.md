@@ -1,7 +1,7 @@
-# Casting Agency App
-The Casting Agency models an app that is responsible for creating movies and managing and assigning actors to those movies. I was assigned to create a system to simplify and streamline processes.
+# MADb
+MADb models an app that is responsible for creating movies and managing and assigning actors to those movies. I was assigned to create a system to simplify and streamline processes.
 
-[Link to Casting Agency App](https://casting-agency-app.herokuapp.com/)
+[Link to MADb App](https://madb-app.herokuapp.com)
 ## Getting Started
 
 ### Installing Dependencies
